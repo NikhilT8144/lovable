@@ -459,8 +459,8 @@ function initAurora(){
     `
   });
   scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2), mat));
-  function resize(){const r=canvas.getBoundingClientRect();renderer.setSize(r.width,r.height,false);uniforms.uRes.value.set(r.width*renderer.getPixelRatio(),r.height*renderer.getPixelRatio());}
-  resize(); addEventListener('resize',resize);
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);uniforms.uRes.value.set(r.width*renderer.getPixelRatio(),r.height*renderer.getPixelRatio());}
+  resize(); addEventListener('resize',resize); new ResizeObserver(resize).observe(canvas);
   addEventListener('pointermove',e=>{const r=canvas.getBoundingClientRect();uniforms.uMouse.value.set(e.clientX/r.width, 1-e.clientY/r.height);});
   const clock = new THREE.Clock();
   (function loop(){uniforms.uTime.value=clock.getElapsedTime();renderer.render(scene,camera);requestAnimationFrame(loop);})();
@@ -513,8 +513,8 @@ function initGalaxy(){
   let disp = 0;
   ScrollTrigger.create({trigger:'.galaxy-wrap',start:'top bottom',end:'bottom top',scrub:true,onUpdate:s=>{disp = s.progress;}});
 
-  function resize(){const r=canvas.getBoundingClientRect();renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}
-  resize(); addEventListener('resize',resize);
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}
+  resize(); addEventListener('resize',resize); new ResizeObserver(resize).observe(canvas);
 
   const pos = geom.attributes.position.array;
   const vec = new THREE.Vector3();
@@ -564,8 +564,8 @@ function initTorus(){
   const l2 = new THREE.PointLight(0xe879f9,3,20); l2.position.set(-4,-3,3); scene.add(l2);
   scene.add(new THREE.AmbientLight(0x141432,1));
 
-  function resize(){const r=canvas.getBoundingClientRect();renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}
-  resize(); addEventListener('resize',resize);
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}
+  resize(); addEventListener('resize',resize); new ResizeObserver(resize).observe(canvas);
 
   const state = {rot:0, scale:1, hue:0};
   const stanzaEls = document.querySelectorAll('.stanza');
