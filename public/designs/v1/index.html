@@ -558,6 +558,7 @@ function initTorus(){
   resize(); addEventListener('resize',resize);
 
   const state = {rot:0, scale:1, hue:0};
+  const stanzaEls = document.querySelectorAll('.stanza');
   ScrollTrigger.create({
     trigger:'.scrub',start:'top top',end:'bottom bottom',scrub:1,
     onUpdate:s=>{
@@ -565,22 +566,11 @@ function initTorus(){
       state.scale = 1 + s.progress*.6;
       mat.color.setHSL(.72 - s.progress*.35, .7, .55);
       mat.emissiveIntensity = .05 + s.progress*.25;
+      const idx = Math.min(stanzaEls.length-1, Math.floor(s.progress*stanzaEls.length));
+      stanzaEls.forEach((el,i)=>el.classList.toggle('is-active', i===idx));
     }
   });
-
-  const stanzas = document.querySelectorAll('.stanza');
-  stanzas.forEach((s,i)=>{
-    gsap.to(s,{
-      opacity:1, scrollTrigger:{
-        trigger:'.scrub', start:`top+=${i*33}% top`, end:`top+=${(i+1)*33}% top`, scrub:true,
-        onEnter:()=>gsap.to(s,{opacity:1,y:0,duration:.6}),
-        onLeave:()=>gsap.to(s,{opacity:0,y:-20,duration:.6}),
-        onEnterBack:()=>gsap.to(s,{opacity:1,y:0,duration:.6}),
-        onLeaveBack:()=>gsap.to(s,{opacity:0,y:20,duration:.6})
-      }
-    });
-    gsap.set(s,{y:20});
-  });
+  stanzaEls[0].classList.add('is-active');
 
   (function loop(){
     mesh.rotation.x = state.rot*.5;
