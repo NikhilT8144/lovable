@@ -126,6 +126,8 @@
   .bento{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:180px;gap:16px;padding:0 clamp(20px,4vw,48px) 80px}
   .card{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:linear-gradient(180deg,rgba(233,231,255,.04),rgba(233,231,255,.01));padding:24px;display:flex;flex-direction:column;justify-content:space-between;transform-style:preserve-3d;transition:border-color .4s}
   .card:hover{border-color:rgba(124,58,237,.5)}
+  .card,.card canvas,.marquee .row,#torus,#aurora,#galaxy{transform:translateZ(0)}
+  .marquee .row{will-change:transform}
   .card canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.85}
   .card .card-inner{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:space-between;height:100%;pointer-events:none}
   .card .glare{position:absolute;inset:0;background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%),rgba(124,58,237,.15),transparent 40%);z-index:1;opacity:0;transition:opacity .3s}
