@@ -560,8 +560,8 @@ function initTorus(){
   const l2 = new THREE.PointLight(0xe879f9,3,20); l2.position.set(-4,-3,3); scene.add(l2);
   scene.add(new THREE.AmbientLight(0x141432,1));
 
-  function resize(){const r=canvas.getBoundingClientRect();renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}
-  resize(); addEventListener('resize',resize);
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}
+  resize(); addEventListener('resize',resize); new ResizeObserver(resize).observe(canvas);
 
   const state = {rot:0, scale:1, hue:0};
   const stanzaEls = document.querySelectorAll('.stanza');
