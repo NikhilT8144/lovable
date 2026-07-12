@@ -31,7 +31,7 @@
     --ease:cubic-bezier(.6,.01,.05,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+  html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:clip}
   body{
     background:
       radial-gradient(1200px 800px at 20% -10%, rgba(124,58,237,.25), transparent 60%),
@@ -73,7 +73,7 @@
 
   /* ---------- Hero ---------- */
   section.hero{position:relative;height:100vh;min-height:640px;overflow:hidden;isolation:isolate;background:#05050d}
-  .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated;image-rendering:crisp-edges;z-index:0;filter:saturate(1.15) contrast(1.05);transform:scale(1.02)}
+  .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated;image-rendering:crisp-edges;z-index:0;filter:saturate(1.15) contrast(1.05);transform:translateZ(0) scale(1.02)}
   .hero-scan{position:absolute;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 2px,transparent 2px 4px);mix-blend-mode:multiply;opacity:.55}
   .hero-vignette{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,transparent 30%,rgba(5,5,13,.55) 75%,rgba(5,5,13,.95) 100%),linear-gradient(180deg,rgba(5,5,13,.35) 0%,transparent 25%,transparent 55%,rgba(5,5,13,.85) 100%)}
   .hero .content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(20px,4vw,48px) clamp(40px,6vw,80px);gap:clamp(24px,4vw,48px)}
@@ -107,7 +107,7 @@
 
   /* ---------- Particle galaxy ---------- */
   .galaxy-wrap{position:relative;height:100vh;min-height:600px;overflow:hidden;border-block:1px solid var(--line)}
-  #galaxy{position:absolute;inset:0}
+  #galaxy{position:absolute;inset:0;width:100%;height:100%;display:block}
   .galaxy-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;flex-direction:column;gap:16px;text-align:center;padding:0 24px}
   .galaxy-overlay p{font-family:var(--mono);font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--ink-dim);max-width:400px;line-height:1.8}
   .galaxy-overlay h3{font-family:var(--serif);font-size:clamp(36px,5vw,72px);font-weight:400;letter-spacing:-.02em}
@@ -115,9 +115,10 @@
   /* ---------- Torus scrub ---------- */
   .scrub{height:300vh;position:relative}
   .scrub .pin{position:sticky;top:0;height:100vh;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
-  #torus{position:absolute;inset:0;z-index:0}
+  #torus{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:0;transform:translateZ(0)}
   .scrub .copy{position:relative;z-index:2;grid-column:2;display:flex;align-items:center;padding:0 clamp(24px,5vw,72px);pointer-events:none}
-  .scrub .stanza{position:absolute;max-width:32ch;opacity:0}
+  .scrub .stanza{position:absolute;max-width:32ch;opacity:0;transform:translate3d(0,20px,0);transition:opacity .5s var(--ease),transform .5s var(--ease);will-change:opacity,transform}
+  .scrub .stanza.is-active{opacity:1;transform:translate3d(0,0,0)}
   .scrub .stanza h3{font-family:var(--serif);font-weight:400;font-size:clamp(28px,4vw,52px);line-height:1.1;letter-spacing:-.02em;margin-bottom:16px}
   .scrub .stanza h3 em{font-style:italic;color:var(--cyan)}
   .scrub .stanza p{font-family:var(--mono);font-size:12px;line-height:1.9;letter-spacing:.05em;color:var(--ink-dim)}
@@ -127,6 +128,8 @@
   .bento{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:180px;gap:16px;padding:0 clamp(20px,4vw,48px) 80px}
   .card{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:linear-gradient(180deg,rgba(233,231,255,.04),rgba(233,231,255,.01));padding:24px;display:flex;flex-direction:column;justify-content:space-between;transform-style:preserve-3d;transition:border-color .4s}
   .card:hover{border-color:rgba(124,58,237,.5)}
+  .card,.card canvas,.marquee .row,#torus,#galaxy{transform:translateZ(0)}
+  .marquee .row{will-change:transform}
   .card canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.85}
   .card .card-inner{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:space-between;height:100%;pointer-events:none}
   .card .glare{position:absolute;inset:0;background:radial-gradient(600px circle at var(--mx,50%) var(--my,50%),rgba(124,58,237,.15),transparent 40%);z-index:1;opacity:0;transition:opacity .3s}
@@ -397,7 +400,7 @@ function initScene(){
     });
   });
 
-  // initAurora(); // replaced by pixel-art hero gif
+  // initAurora removed: hero is a pixel-art gif in v2
   initGalaxy();
   initTorus();
   initBento();
@@ -456,8 +459,8 @@ function initAurora(){
     `
   });
   scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2), mat));
-  function resize(){const r=canvas.getBoundingClientRect();renderer.setSize(r.width,r.height,false);uniforms.uRes.value.set(r.width*renderer.getPixelRatio(),r.height*renderer.getPixelRatio());}
-  resize(); addEventListener('resize',resize);
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);uniforms.uRes.value.set(r.width*renderer.getPixelRatio(),r.height*renderer.getPixelRatio());}
+  resize(); addEventListener('resize',resize); new ResizeObserver(resize).observe(canvas);
   addEventListener('pointermove',e=>{const r=canvas.getBoundingClientRect();uniforms.uMouse.value.set(e.clientX/r.width, 1-e.clientY/r.height);});
   const clock = new THREE.Clock();
   (function loop(){uniforms.uTime.value=clock.getElapsedTime();renderer.render(scene,camera);requestAnimationFrame(loop);})();
@@ -510,12 +513,15 @@ function initGalaxy(){
   let disp = 0;
   ScrollTrigger.create({trigger:'.galaxy-wrap',start:'top bottom',end:'bottom top',scrub:true,onUpdate:s=>{disp = s.progress;}});
 
-  function resize(){const r=canvas.getBoundingClientRect();renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}
-  resize(); addEventListener('resize',resize);
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}
+  resize(); addEventListener('resize',resize); new ResizeObserver(resize).observe(canvas);
 
   const pos = geom.attributes.position.array;
   const vec = new THREE.Vector3();
-  (function loop(){
+  let gVisible = true;
+  new IntersectionObserver(([e])=>{ const was=gVisible; gVisible = e.isIntersecting; if(gVisible && !was) galaxyLoop(); },{rootMargin:'200px'}).observe(canvas);
+  function galaxyLoop(){
+    if(!gVisible) return;
     tRotY += .0015;
     rotX += (tRotX-rotX)*.06; rotY += (tRotY-rotY)*.06;
     points.rotation.x = rotX; points.rotation.y = rotY;
@@ -537,8 +543,9 @@ function initGalaxy(){
     }
     geom.attributes.position.needsUpdate = true;
     renderer.render(scene,camera);
-    requestAnimationFrame(loop);
-  })();
+    requestAnimationFrame(galaxyLoop);
+  }
+  galaxyLoop();
 }
 
 /* ---------- Torus scrub ---------- */
@@ -557,10 +564,11 @@ function initTorus(){
   const l2 = new THREE.PointLight(0xe879f9,3,20); l2.position.set(-4,-3,3); scene.add(l2);
   scene.add(new THREE.AmbientLight(0x141432,1));
 
-  function resize(){const r=canvas.getBoundingClientRect();renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}
-  resize(); addEventListener('resize',resize);
+  function resize(){const r=canvas.getBoundingClientRect();if(!r.width||!r.height)return;renderer.setSize(r.width,r.height,false);camera.aspect=r.width/r.height;camera.updateProjectionMatrix();}
+  resize(); addEventListener('resize',resize); new ResizeObserver(resize).observe(canvas);
 
   const state = {rot:0, scale:1, hue:0};
+  const stanzaEls = document.querySelectorAll('.stanza');
   ScrollTrigger.create({
     trigger:'.scrub',start:'top top',end:'bottom bottom',scrub:1,
     onUpdate:s=>{
@@ -568,30 +576,23 @@ function initTorus(){
       state.scale = 1 + s.progress*.6;
       mat.color.setHSL(.72 - s.progress*.35, .7, .55);
       mat.emissiveIntensity = .05 + s.progress*.25;
+      const idx = Math.min(stanzaEls.length-1, Math.floor(s.progress*stanzaEls.length));
+      stanzaEls.forEach((el,i)=>el.classList.toggle('is-active', i===idx));
     }
   });
+  stanzaEls[0].classList.add('is-active');
 
-  const stanzas = document.querySelectorAll('.stanza');
-  stanzas.forEach((s,i)=>{
-    gsap.to(s,{
-      opacity:1, scrollTrigger:{
-        trigger:'.scrub', start:`top+=${i*33}% top`, end:`top+=${(i+1)*33}% top`, scrub:true,
-        onEnter:()=>gsap.to(s,{opacity:1,y:0,duration:.6}),
-        onLeave:()=>gsap.to(s,{opacity:0,y:-20,duration:.6}),
-        onEnterBack:()=>gsap.to(s,{opacity:1,y:0,duration:.6}),
-        onLeaveBack:()=>gsap.to(s,{opacity:0,y:20,duration:.6})
-      }
-    });
-    gsap.set(s,{y:20});
-  });
-
-  (function loop(){
+  let tVisible = true;
+  new IntersectionObserver(([e])=>{ const was=tVisible; tVisible = e.isIntersecting; if(tVisible && !was) torusLoop(); },{rootMargin:'200px'}).observe(canvas);
+  function torusLoop(){
+    if(!tVisible) return;
     mesh.rotation.x = state.rot*.5;
     mesh.rotation.y = state.rot;
     mesh.scale.setScalar(state.scale);
     renderer.render(scene,camera);
-    requestAnimationFrame(loop);
-  })();
+    requestAnimationFrame(torusLoop);
+  }
+  torusLoop();
 }
 
 /* ---------- Bento micro-canvases ---------- */
@@ -612,7 +613,11 @@ function initBento(){
     function size(){const r=cv.getBoundingClientRect();w=r.width;h=r.height;cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
     size(); addEventListener('resize',size);
     let t=0;
+    let visible = true;
+    const io = new IntersectionObserver(([e])=>{ visible = e.isIntersecting; if(visible) frame(); },{rootMargin:'100px'});
+    io.observe(card);
     function frame(){
+      if(!visible) return;
       t+=.016;
       ctx.clearRect(0,0,w,h);
       if(kind==='waves'){
@@ -713,7 +718,14 @@ function initMagnet(){
   const nodes = [...grid.querySelectorAll('.mnode')];
   const states = nodes.map(n=>({x:0,y:0,tx:0,ty:0,el:n,rect:null}));
   function measure(){states.forEach(s=>s.rect=s.el.getBoundingClientRect());}
-  measure(); addEventListener('resize',measure); addEventListener('scroll',measure,{passive:true});
+  measure(); addEventListener('resize',measure);
+  // Refresh rects on scroll via rAF-throttled ticker so Lenis smooth scroll stays smooth
+  let scrollPending = false;
+  addEventListener('scroll',()=>{
+    if(scrollPending) return;
+    scrollPending = true;
+    requestAnimationFrame(()=>{ measure(); scrollPending = false; });
+  },{passive:true});
   addEventListener('pointermove',e=>{
     states.forEach(s=>{
       const cx=s.rect.left+s.rect.width/2, cy=s.rect.top+s.rect.height/2;
