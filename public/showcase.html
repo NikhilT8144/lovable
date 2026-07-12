@@ -311,7 +311,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.8.1/dist/vanilla-tilt.min.js"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 
@@ -697,7 +697,7 @@ function initBento(){
 
 /* ---------- Magnetic icons ---------- */
 function initMagnet(){
-  const icons = ['aperture','atom','anchor','award','box','brain','bug','cloud','code','compass','cpu','crown','diamond','disc','dna','droplet','feather','flame','flower','gem','ghost','grid','hexagon','key','leaf','lightbulb','link','lock','magnet','moon','mountain','music','octagon','palette','planet','puzzle','rocket','scan','shell','shield','snowflake','sparkles','spade','star','sun','target','tent','triangle','trophy','umbrella','wand','waves','wind','zap'];
+  const icons = ['aperture','atom','anchor','award','box','brain','bug','cloud','code','compass','cpu','crown','diamond','disc','dna','droplet','feather','flame','flower','gem','ghost','grid','hexagon','key','leaf','lightbulb','link','lock','magnet','moon','mountain','music','octagon','palette','orbit','puzzle','rocket','scan','shell','shield','snowflake','sparkles','spade','star','sun','target','tent','triangle','trophy','umbrella','wand','waves','wind','zap'];
   const grid = document.getElementById('magnetGrid');
   icons.forEach(name=>{
     const el = document.createElement('div');
