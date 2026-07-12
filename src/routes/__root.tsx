@@ -77,14 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Testing Web Apps" },
+      { name: "description", content: "A simple application that displays \"Hello World\"." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Testing Web Apps" },
+      { property: "og:description", content: "A simple application that displays \"Hello World\"." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Testing Web Apps" },
+      { name: "twitter:description", content: "A simple application that displays \"Hello World\"." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/cfeebc2f-e1f2-41aa-aa35-81e1064d8844/id-preview-aa166dc2--1f3ffc20-e8b6-4ee8-8e40-513fb5b63bd9.lovable.app-1783854939707.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/cfeebc2f-e1f2-41aa-aa35-81e1064d8844/id-preview-aa166dc2--1f3ffc20-e8b6-4ee8-8e40-513fb5b63bd9.lovable.app-1783854939707.png" },
     ],
     links: [
       {
