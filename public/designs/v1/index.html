@@ -515,8 +515,8 @@ function initGalaxy(){
   const pos = geom.attributes.position.array;
   const vec = new THREE.Vector3();
   let gVisible = true;
-  new IntersectionObserver(([e])=>{ gVisible = e.isIntersecting; if(gVisible) loop(); },{rootMargin:'200px'}).observe(canvas);
-  (function loop(){
+  new IntersectionObserver(([e])=>{ const was=gVisible; gVisible = e.isIntersecting; if(gVisible && !was) galaxyLoop(); },{rootMargin:'200px'}).observe(canvas);
+  function galaxyLoop(){
     if(!gVisible) return;
     tRotY += .0015;
     rotX += (tRotX-rotX)*.06; rotY += (tRotY-rotY)*.06;
@@ -539,8 +539,9 @@ function initGalaxy(){
     }
     geom.attributes.position.needsUpdate = true;
     renderer.render(scene,camera);
-    requestAnimationFrame(loop);
-  })();
+    requestAnimationFrame(galaxyLoop);
+  }
+  galaxyLoop();
 }
 
 /* ---------- Torus scrub ---------- */
