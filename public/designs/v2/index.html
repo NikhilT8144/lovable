@@ -72,8 +72,10 @@
   @media (max-width:640px){.nav ul{display:none}}
 
   /* ---------- Hero ---------- */
-  section.hero{position:relative;height:100vh;min-height:640px;overflow:hidden;isolation:isolate}
-  #aurora{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+  section.hero{position:relative;height:100vh;min-height:640px;overflow:hidden;isolation:isolate;background:#05050d}
+  .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;image-rendering:pixelated;image-rendering:crisp-edges;z-index:0;filter:saturate(1.15) contrast(1.05);transform:translateZ(0) scale(1.02)}
+  .hero-scan{position:absolute;inset:0;z-index:1;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 2px,transparent 2px 4px);mix-blend-mode:multiply;opacity:.55}
+  .hero-vignette{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 40%,transparent 30%,rgba(5,5,13,.55) 75%,rgba(5,5,13,.95) 100%),linear-gradient(180deg,rgba(5,5,13,.35) 0%,transparent 25%,transparent 55%,rgba(5,5,13,.85) 100%)}
   .hero .content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(20px,4vw,48px) clamp(40px,6vw,80px);gap:clamp(24px,4vw,48px)}
   .hero .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--ink-dim);display:flex;gap:16px;align-items:center}
   .hero .kicker::before{content:"";width:32px;height:1px;background:var(--ink-dim)}
@@ -126,7 +128,7 @@
   .bento{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:180px;gap:16px;padding:0 clamp(20px,4vw,48px) 80px}
   .card{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:linear-gradient(180deg,rgba(233,231,255,.04),rgba(233,231,255,.01));padding:24px;display:flex;flex-direction:column;justify-content:space-between;transform-style:preserve-3d;transition:border-color .4s}
   .card:hover{border-color:rgba(124,58,237,.5)}
-  .card,.card canvas,.marquee .row,#torus,#aurora,#galaxy{transform:translateZ(0)}
+  .card,.card canvas,.marquee .row,#torus,#galaxy{transform:translateZ(0)}
   .marquee .row{will-change:transform}
   .card canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.85}
   .card .card-inner{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:space-between;height:100%;pointer-events:none}
@@ -197,7 +199,9 @@
 </header>
 
 <section class="hero">
-  <canvas id="aurora"></canvas>
+  <img class="hero-bg" src="./v2-assets/hero.gif" alt="Neon-lit retro pixel-art Japanese city street at night" />
+  <div class="hero-scan"></div>
+  <div class="hero-vignette"></div>
   <div class="content">
     <div class="kicker">MMXXVI · Volume 01 · A Creative Experiment</div>
     <h1 class="title" data-split>An <em>obsidian</em><br/>quiet.</h1>
@@ -396,7 +400,7 @@ function initScene(){
     });
   });
 
-  initAurora();
+  // initAurora removed: hero is a pixel-art gif in v2
   initGalaxy();
   initTorus();
   initBento();
