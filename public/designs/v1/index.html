@@ -706,7 +706,14 @@ function initMagnet(){
   const nodes = [...grid.querySelectorAll('.mnode')];
   const states = nodes.map(n=>({x:0,y:0,tx:0,ty:0,el:n,rect:null}));
   function measure(){states.forEach(s=>s.rect=s.el.getBoundingClientRect());}
-  measure(); addEventListener('resize',measure); addEventListener('scroll',measure,{passive:true});
+  measure(); addEventListener('resize',measure);
+  // Refresh rects on scroll via rAF-throttled ticker so Lenis smooth scroll stays smooth
+  let scrollPending = false;
+  addEventListener('scroll',()=>{
+    if(scrollPending) return;
+    scrollPending = true;
+    requestAnimationFrame(()=>{ measure(); scrollPending = false; });
+  },{passive:true});
   addEventListener('pointermove',e=>{
     states.forEach(s=>{
       const cx=s.rect.left+s.rect.width/2, cy=s.rect.top+s.rect.height/2;
