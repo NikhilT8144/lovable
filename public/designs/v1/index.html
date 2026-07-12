@@ -601,7 +601,11 @@ function initBento(){
     function size(){const r=cv.getBoundingClientRect();w=r.width;h=r.height;cv.width=w*dpr;cv.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
     size(); addEventListener('resize',size);
     let t=0;
+    let visible = true;
+    const io = new IntersectionObserver(([e])=>{ visible = e.isIntersecting; if(visible) frame(); },{rootMargin:'100px'});
+    io.observe(card);
     function frame(){
+      if(!visible) return;
       t+=.016;
       ctx.clearRect(0,0,w,h);
       if(kind==='waves'){
